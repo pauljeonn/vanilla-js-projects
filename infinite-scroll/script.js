@@ -1,5 +1,6 @@
 // DOM Manipulation
 const imageContainer = document.getElementById('image-container');
+const loaderContainer = document.getElementById('loader-container');
 const loader = document.getElementById('loader');
 
 // 사진 정보를 저장하는 photos 변수 생성
@@ -28,6 +29,8 @@ function imageLoaded() {
 	console.log('images loaded');
 	if (imagesLoaded === totalImages) {
 		ready = true;
+		loaderContainer.classList.add('hidden');
+		loader.hidden = true;
 		console.log(ready);
 	}
 }
