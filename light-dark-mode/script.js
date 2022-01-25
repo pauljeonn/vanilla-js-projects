@@ -13,26 +13,19 @@ function imageMode(mode) {
 	image3.src = `img/undraw_conceptual_idea_${mode}.svg`;
 }
 
-// 다크 모드 스타일
-const darkMode = () => {
-	nav.style.backgroundColor = 'rgb(0 0 0 / 50%)';
-	textBox.style.backgroundColor = 'rgb(255 255 255 / 50%)';
-	// 다크 모드 텍스트 및 아이콘 변경
-	toggleIcon.children[0].textContent = 'Dark Mode';
-	toggleIcon.children[1].classList.replace('fa-sun', 'fa-moon');
-	// 다크 모드용 이미지로 변경
-	imageMode('dark');
-};
-
-// 라이트 모드 스타일
-const lightMode = () => {
-	nav.style.backgroundColor = 'rgb(255 255 255 / 50%)';
-	textBox.style.backgroundColor = 'rgb(0 0 0 / 50%)';
-	// 라이트 모드 텍스트 및 아이콘 변경
-	toggleIcon.children[0].textContent = 'Light Mode';
-	toggleIcon.children[1].classList.replace('fa-moon', 'fa-sun');
-	// 라이트 모드용 이미지로 변경
-	imageMode('light');
+// 토글 모드 함수
+const toggleMode = (isDark) => {
+	nav.style.backgroundColor = isDark
+		? 'rgb(0 0 0 / 50%)'
+		: 'rgb(255 255 255 / 50%)';
+	textBox.style.backgroundColor = isDark
+		? 'rgb(255 255 255 / 50%)'
+		: 'rgb(0 0 0 / 50%)';
+	toggleIcon.children[0].textContent = isDark ? 'Dark Mode' : 'Light Mode';
+	isDark
+		? toggleIcon.children[1].classList.replace('fa-sun', 'fa-moon')
+		: toggleIcon.children[1].classList.replace('fa-moon', 'fa-sun');
+	isDark ? imageMode('dark') : imageMode('light');
 };
 
 // 동적으로 테마 변경
@@ -42,12 +35,12 @@ const switchTheme = (event) => {
 		document.documentElement.setAttribute('data-theme', 'dark');
 		// 로컬스토리지에 현재 테마 저장
 		localStorage.setItem('theme', 'dark');
-		darkMode();
+		toggleMode(true);
 	} else {
 		document.documentElement.setAttribute('data-theme', 'light');
 		// 로컬스토리지에 현재 테마 저장
 		localStorage.setItem('theme', 'light');
-		lightMode();
+		toggleMode(false);
 	}
 };
 
@@ -62,6 +55,6 @@ if (currentTheme) {
 	// 저장된 테마가 다크 모드면 toggleSwitch 상태 변경 및 darkMode 함수 실행
 	if (currentTheme === 'dark') {
 		toggleSwitch.checked = true;
-		darkMode();
+		toggleMode(true);
 	}
 }
