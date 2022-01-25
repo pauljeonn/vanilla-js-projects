@@ -40,12 +40,28 @@ const switchTheme = (event) => {
 	console.log(event.target.checked);
 	if (event.target.checked) {
 		document.documentElement.setAttribute('data-theme', 'dark');
+		// 로컬스토리지에 현재 테마 저장
+		localStorage.setItem('theme', 'dark');
 		darkMode();
 	} else {
 		document.documentElement.setAttribute('data-theme', 'light');
+		// 로컬스토리지에 현재 테마 저장
+		localStorage.setItem('theme', 'light');
 		lightMode();
 	}
 };
 
 // 이벤트 리스너 추가
 toggleSwitch.addEventListener('change', switchTheme);
+
+// 로컬 스토리지에 저장된 모드가 있는지 확인
+const currentTheme = localStorage.getItem('theme');
+if (currentTheme) {
+	document.documentElement.setAttribute('data-theme', currentTheme);
+
+	// 저장된 테마가 다크 모드면 toggleSwitch 상태 변경 및 darkMode 함수 실행
+	if (currentTheme === 'dark') {
+		toggleSwitch.checked = true;
+		darkMode();
+	}
+}
