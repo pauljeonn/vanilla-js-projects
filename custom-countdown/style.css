@@ -1,5 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
 html {
 	box-sizing: border-box;
+	font-family: 'Roboto', sans-serif;
 }
 
 body {
@@ -56,6 +59,7 @@ video {
 
 h1 {
 	font-size: 35px;
+	font-weight: 500;
 	text-align: center;
 	margin-top: 0;
 	margin-bottom: 10px;
@@ -67,7 +71,7 @@ h1 {
 }
 
 label {
-	font-weight: bold;
+	font-weight: 500;
 	margin-left: 10px;
 }
 
@@ -79,6 +83,7 @@ input {
 	border-radius: 20px;
 	background: #fff;
 	outline: none;
+	font-family: 'Roboto', sans-serif;
 }
 
 /* Button */
@@ -93,6 +98,11 @@ button {
 	color: white;
 	cursor: pointer;
 	outline: none;
+}
+
+button:hover {
+	/* 마우스오버 시 밝기 변경 */
+	filter: brightness(110%);
 }
 
 /* Countdown */
