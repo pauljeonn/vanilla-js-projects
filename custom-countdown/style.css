@@ -130,6 +130,33 @@ li span {
 	top: 60px;
 }
 
+.complete-title {
+	animation: complete 4s infinite;
+}
+
+@keyframes complete {
+	0% {
+		color: red;
+	}
+
+	25% {
+		color: orange;
+	}
+
+	50% {
+		color: green;
+		transform: scale(1.2);
+	}
+
+	75% {
+		color: blue;
+	}
+
+	100% {
+		color: purple;
+	}
+}
+
 /* Media Query: Large Smartphone (Vertical) */
 @media screen and (max-width: 600px) {
 	.video-background {
