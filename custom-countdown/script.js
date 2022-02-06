@@ -15,6 +15,7 @@ let countdownTitle = '';
 let countdownDate = '';
 let countdownValue = Date;
 let countdownActive;
+let savedCountdown;
 
 const second = 1000;
 const minute = second * 60;
@@ -23,7 +24,6 @@ const day = hour * 24;
 
 // 오늘 날짜로 Min Date 설정하기
 const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD만 가져오기
-console.log(today);
 dateEl.setAttribute('min', today);
 
 // 남은 시간 계산 및 디스플레이
@@ -66,6 +66,13 @@ function updateCountdown(e) {
 	// submit 정보에서 title과 date 값 추출
 	countdownTitle = e.srcElement[0].value;
 	countdownDate = e.srcElement[1].value;
+	// 카운트다운 저장
+	savedCountdown = {
+		title: countdownTitle,
+		date: countdownDate,
+	};
+	// 자바스크립트 객체를 JSON string으로 변환하여 로컬스토리지에 저장
+	localStorage.setItem('countdown', JSON.stringify(savedCountdown));
 
 	// 날짜가 비어있으면 경고 표시
 	if (countdownDate === '') {
@@ -87,9 +94,28 @@ function reset() {
 	clearInterval(countdownActive);
 	countdownTitle = '';
 	countdownDate = '';
+
+	// 로컬스토리지 삭제
+	localStorage.removeItem('countdown');
+}
+
+// 저장한 카운트다운 불러오기
+function restoreCountdown() {
+	// 로컬스토리지에서 정보 가져오기
+	if (localStorage.getItem('countdown')) {
+		inputContainer.hidden = true;
+		savedCountdown = JSON.parse(localStorage.getItem('countdown'));
+		countdownTitle = savedCountdown.title;
+		countdownDate = savedCountdown.date;
+		countdownValue = new Date(countdownDate).getTime();
+		updateDOM();
+	}
 }
 
 // 이벤트 리스너
 countdownForm.addEventListener('submit', updateCountdown);
 countdownBtn.addEventListener('click', reset);
 completeBtn.addEventListener('click', reset);
+
+// 자바스크립트 로드 시, 로컬스토리지 확인
+restoreCountdown();
