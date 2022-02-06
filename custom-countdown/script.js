@@ -1,10 +1,15 @@
 const inputContainer = document.getElementById('input-container');
 const countdownForm = document.getElementById('countdownForm');
 const dateEl = document.getElementById('date-picker');
+
 const countdownEl = document.getElementById('countdown');
 const countdownElTitle = document.getElementById('countdown-title');
 const countdownBtn = document.getElementById('countdown-button');
 const timeElements = document.querySelectorAll('span');
+
+const completeEl = document.getElementById('complete');
+const completeElInfo = document.getElementById('complete-info');
+const completeBtn = document.getElementById('complete-button');
 
 let countdownTitle = '';
 let countdownDate = '';
@@ -27,21 +32,31 @@ function updateDOM() {
 		const now = new Date().getTime();
 		const remainingTime = countdownValue - now;
 
-		// 남은 시간 계산
-		const days = Math.floor(remainingTime / day);
-		const hours = Math.floor((remainingTime % day) / hour);
-		const minutes = Math.floor((remainingTime % hour) / minute);
-		const seconds = Math.floor((remainingTime % minute) / second);
-
-		// 카운트다운 정보 표시
-		countdownElTitle.textContent = `${countdownTitle}`;
-		timeElements[0].textContent = `${days}`;
-		timeElements[1].textContent = `${hours}`;
-		timeElements[2].textContent = `${minutes}`;
-		timeElements[3].textContent = `${seconds}`;
-
 		inputContainer.hidden = true;
-		countdownEl.hidden = false;
+
+		if (remainingTime < 0) {
+			clearInterval(countdownActive);
+			completeElInfo.textContent = `${countdownTitle} finished on ${countdownDate}`;
+
+			countdownEl.hidden = true;
+			completeEl.hidden = false;
+		} else {
+			// 남은 시간 계산
+			const days = Math.floor(remainingTime / day);
+			const hours = Math.floor((remainingTime % day) / hour);
+			const minutes = Math.floor((remainingTime % hour) / minute);
+			const seconds = Math.floor((remainingTime % minute) / second);
+
+			// 카운트다운 정보 표시
+			countdownElTitle.textContent = `${countdownTitle}`;
+			timeElements[0].textContent = `${days}`;
+			timeElements[1].textContent = `${hours}`;
+			timeElements[2].textContent = `${minutes}`;
+			timeElements[3].textContent = `${seconds}`;
+
+			completeEl.hidden = true;
+			countdownEl.hidden = false;
+		}
 	}, 1000);
 }
 
@@ -51,16 +66,21 @@ function updateCountdown(e) {
 	// submit 정보에서 title과 date 값 추출
 	countdownTitle = e.srcElement[0].value;
 	countdownDate = e.srcElement[1].value;
-	console.log(countdownTitle, countdownDate);
-	// 추출한 date 값을 숫자로 변환
-	countdownValue = new Date(countdownDate).getTime();
-	console.log(countdownValue);
-	updateDOM();
+
+	// 날짜가 비어있으면 경고 표시
+	if (countdownDate === '') {
+		alert('Please select a date!');
+	} else {
+		// 추출한 date 값을 숫자로 변환
+		countdownValue = new Date(countdownDate).getTime();
+		updateDOM();
+	}
 }
 
 // 리셋
 function reset() {
 	countdownEl.hidden = true;
+	completeEl.hidden = true;
 	inputContainer.hidden = false;
 
 	// 카운트다운 정지
@@ -72,3 +92,4 @@ function reset() {
 // 이벤트 리스너
 countdownForm.addEventListener('submit', updateCountdown);
 countdownBtn.addEventListener('click', reset);
+completeBtn.addEventListener('click', reset);
