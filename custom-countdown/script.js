@@ -9,6 +9,7 @@ const timeElements = document.querySelectorAll('span');
 let countdownTitle = '';
 let countdownDate = '';
 let countdownValue = Date;
+let countdownActive;
 
 const second = 1000;
 const minute = second * 60;
@@ -20,25 +21,28 @@ const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD만 가져오
 console.log(today);
 dateEl.setAttribute('min', today);
 
-// 남은 시간 계산 및 업데이트
+// 남은 시간 계산 및 디스플레이
 function updateDOM() {
-	const now = new Date().getTime();
-	const remainingTime = countdownValue - now;
+	countdownActive = setInterval(() => {
+		const now = new Date().getTime();
+		const remainingTime = countdownValue - now;
 
-	const days = Math.floor(remainingTime / day);
-	const hours = Math.floor((remainingTime % day) / hour);
-	const minutes = Math.floor((remainingTime % hour) / minute);
-	const seconds = Math.floor((remainingTime % minute) / second);
+		// 남은 시간 계산
+		const days = Math.floor(remainingTime / day);
+		const hours = Math.floor((remainingTime % day) / hour);
+		const minutes = Math.floor((remainingTime % hour) / minute);
+		const seconds = Math.floor((remainingTime % minute) / second);
 
-	// 카운트다운 정보 표시
-	countdownElTitle.textContent = `${countdownTitle}`;
-	timeElements[0].textContent = `${days}`;
-	timeElements[1].textContent = `${hours}`;
-	timeElements[2].textContent = `${minutes}`;
-	timeElements[3].textContent = `${seconds}`;
+		// 카운트다운 정보 표시
+		countdownElTitle.textContent = `${countdownTitle}`;
+		timeElements[0].textContent = `${days}`;
+		timeElements[1].textContent = `${hours}`;
+		timeElements[2].textContent = `${minutes}`;
+		timeElements[3].textContent = `${seconds}`;
 
-	inputContainer.hidden = true;
-	countdownEl.hidden = false;
+		inputContainer.hidden = true;
+		countdownEl.hidden = false;
+	}, 1000);
 }
 
 // Form Input 값 가져오기
@@ -54,5 +58,17 @@ function updateCountdown(e) {
 	updateDOM();
 }
 
+// 리셋
+function reset() {
+	countdownEl.hidden = true;
+	inputContainer.hidden = false;
+
+	// 카운트다운 정지
+	clearInterval(countdownActive);
+	countdownTitle = '';
+	countdownDate = '';
+}
+
 // 이벤트 리스너
 countdownForm.addEventListener('submit', updateCountdown);
+countdownBtn.addEventListener('click', reset);
