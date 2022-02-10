@@ -1,3 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
+:root {
+	--primary-color: #7c59b0;
+	--border-radius: 5px;
+}
+
 html {
 	box-sizing: border-box;
 }
@@ -5,4 +12,23 @@ html {
 body {
 	margin: 0;
 	min-height: 100vh;
+	background-color: var(--primary-color);
+	font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+	color: white;
+	padding: 20px;
+	background-color: rgba(0, 0, 0, 0.5);
+	border-radius: var(--border-radius);
+	cursor: pointer;
+	text-transform: uppercase;
+	width: 275px;
+	margin: 20px auto;
+	user-select: none;
+	text-align: center;
+}
+
+h1:hover {
+	background-color: rgba(0, 0, 0, 0.8);
 }
