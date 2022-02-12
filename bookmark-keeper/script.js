@@ -6,6 +6,8 @@ const websiteNameEl = document.getElementById('website-name');
 const websiteUrlEl = document.getElementById('website-url');
 const bookmarksContainer = document.getElementById('bookmarks-container');
 
+let bookmarks = [];
+
 // Show modal, focus on input
 function showModal() {
 	modal.classList.add('show-modal');
@@ -29,15 +31,29 @@ function validate(nameValue, urlValue) {
 	if (!nameValue || !urlValue) {
 		alert('Please submit values for both fields.');
 	}
-	if (urlValue.match(regex)) {
-		alert('match');
-	}
 	if (!urlValue.match(regex)) {
 		alert('Please provide a valid web address');
 		return false;
 	}
 	// Valid
 	return true;
+}
+
+// Fetch bookmarks
+function fetchBookmarks() {
+	// localStorage에 bookmarks가 있으면 가져오기
+	if (localStorage.getItem('bookmarks')) {
+		bookmarks = JSON.parse(localStorage.getItem('bookmarks'));
+	} else {
+		// localStorage에 bookmarks 배열 생성
+		bookmarks = [
+			{
+				name: 'Google',
+				url: 'https://google.com',
+			},
+		];
+		localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+	}
 }
 
 // Handle data from form
@@ -52,7 +68,19 @@ function storeBookmark(e) {
 	if (!validate(nameValue, urlValue)) {
 		return false;
 	}
+	const bookmark = {
+		name: nameValue,
+		url: urlValue,
+	};
+	bookmarks.push(bookmark);
+	// localStorage에 bookmarks 저장
+	localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+	bookmarkForm.reset();
+	websiteNameEl.focus();
 }
 
 // Event listener
 bookmarkForm.addEventListener('submit', storeBookmark);
+
+// 자바스크립트 로드 시, bookmarks 가져오기
+fetchBookmarks();
