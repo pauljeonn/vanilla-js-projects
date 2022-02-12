@@ -6,13 +6,13 @@ const websiteNameEl = document.getElementById('website-name');
 const websiteUrlEl = document.getElementById('website-url');
 const bookmarksContainer = document.getElementById('bookmarks-container');
 
-// Show Modal, Focus on Input
+// Show modal, focus on input
 function showModal() {
 	modal.classList.add('show-modal');
 	websiteNameEl.focus();
 }
 
-// Modal Event Listeners
+// Modal event listeners
 modalShow.addEventListener('click', showModal);
 modalClose.addEventListener('click', () =>
 	modal.classList.remove('show-modal')
@@ -20,3 +20,39 @@ modalClose.addEventListener('click', () =>
 window.addEventListener('click', (e) =>
 	e.target === modal ? modal.classList.remove('show-modal') : false
 );
+
+// Validate form
+function validate(nameValue, urlValue) {
+	const expression =
+		/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
+	const regex = new RegExp(expression);
+	if (!nameValue || !urlValue) {
+		alert('Please submit values for both fields.');
+	}
+	if (urlValue.match(regex)) {
+		alert('match');
+	}
+	if (!urlValue.match(regex)) {
+		alert('Please provide a valid web address');
+		return false;
+	}
+	// Valid
+	return true;
+}
+
+// Handle data from form
+function storeBookmark(e) {
+	e.preventDefault();
+	const nameValue = websiteNameEl.value;
+	let urlValue = websiteUrlEl.value;
+	// http 또는 https가 없는 urlValue를 입력받으면 자동으로 https 추가해주기
+	if (!urlValue.includes('http:;//') || !urlValue.includes('https://')) {
+		urlValue = `https://${urlValue}`;
+	}
+	if (!validate(nameValue, urlValue)) {
+		return false;
+	}
+}
+
+// Event listener
+bookmarkForm.addEventListener('submit', storeBookmark);
