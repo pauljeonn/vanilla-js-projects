@@ -39,6 +39,34 @@ function validate(nameValue, urlValue) {
 	return true;
 }
 
+// Build Bookmarks DOM
+function buildBookmarks() {
+	// Build items
+	bookmarks.forEach((bookmark) => {
+		const { name, url } = bookmark;
+		// Item
+		const item = document.createElement('div');
+		item.classList.add('item');
+		// Close icon
+		const closeIcon = document.createElement('i');
+		closeIcon.classList.add('fas', 'fa-times');
+		closeIcon.setAttribute('title', 'Delete Bookmark');
+		closeIcon.setAttribute('onClick', `deleteBookmark('${url}')`);
+		// Link container
+		const linkInfo = document.createElement('div');
+		linkInfo.classList.add('name');
+		// Link
+		const link = document.createElement('a');
+		link.setAttribute('href', `${url}`);
+		link.setAttribute('target', '_blank');
+		link.textContent = name;
+		// Append to bookmarks container
+		linkInfo.append(link);
+		item.append(closeIcon, linkInfo);
+		bookmarksContainer.appendChild(item);
+	});
+}
+
 // Fetch bookmarks
 function fetchBookmarks() {
 	// localStorage에 bookmarks가 있으면 가져오기
@@ -54,6 +82,7 @@ function fetchBookmarks() {
 		];
 		localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
 	}
+	buildBookmarks();
 }
 
 // Handle data from form
