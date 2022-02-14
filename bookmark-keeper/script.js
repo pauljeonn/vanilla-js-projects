@@ -41,7 +41,9 @@ function validate(nameValue, urlValue) {
 
 // Build Bookmarks DOM
 function buildBookmarks() {
-	// Build items
+	// 기존에 있던 북마크 제거
+	bookmarksContainer.textContent = '';
+	// 북마크 요소 생성
 	bookmarks.forEach((bookmark) => {
 		const { name, url } = bookmark;
 		// Item
@@ -51,7 +53,7 @@ function buildBookmarks() {
 		const closeIcon = document.createElement('i');
 		closeIcon.classList.add('fas', 'fa-times');
 		closeIcon.setAttribute('title', 'Delete Bookmark');
-		closeIcon.setAttribute('onClick', `deleteBookmark('${url}')`);
+		closeIcon.setAttribute('onclick', `deleteBookmark('${url}')`);
 		// Link container
 		const linkInfo = document.createElement('div');
 		linkInfo.classList.add('name');
@@ -85,6 +87,18 @@ function fetchBookmarks() {
 	buildBookmarks();
 }
 
+// Delete bookmark
+function deleteBookmark(url) {
+	bookmarks.forEach((bookmark, i) => {
+		if (bookmark.url === url) {
+			bookmarks.splice(i, 1);
+		}
+	});
+	// localStorage 업데이트 및 북마크 리렌더링
+	localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+	fetchBookmarks();
+}
+
 // Handle data from form
 function storeBookmark(e) {
 	e.preventDefault();
@@ -104,6 +118,7 @@ function storeBookmark(e) {
 	bookmarks.push(bookmark);
 	// localStorage에 bookmarks 저장
 	localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+	fetchBookmarks();
 	bookmarkForm.reset();
 	websiteNameEl.focus();
 }
