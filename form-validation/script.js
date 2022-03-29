@@ -16,6 +16,7 @@ function validateForm() {
 		message.textContent = 'Please fill out all fields.';
 		message.style.color = 'red';
 		messageContainer.style.borderColor = 'red';
+		return; // Stop procedeing and break out of function if isValid is false
 	}
 
 	// Check to see if passwords match
@@ -31,12 +32,35 @@ function validateForm() {
 		password.style.borderColor = 'red';
 		confirmPassword.style.borderColor = 'red';
 	}
+
+	// If form is valid and passwords match
+	if (isValid && passwordMatch) {
+		message.textContent = 'Successfully Registered!';
+		message.style.color = 'green';
+		messageContainer.style.borderColor = 'green';
+	}
+}
+
+function storeFormData() {
+	const user = {
+		name: form.name.value,
+		phone: form.phone.value,
+		email: form.email.value,
+		website: form.website.value,
+		password: form.password.value,
+	};
+	// Do something with user data
+	console.log(user);
 }
 
 function processFormData(e) {
 	e.preventDefault();
 	// Validate Form
 	validateForm();
+	// Submist Data if Valid
+	if (isValid && passwordMatch) {
+		storeFormData();
+	}
 }
 
 // Event Listner
